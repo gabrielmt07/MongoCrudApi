@@ -31,9 +31,9 @@ namespace MongoCrudApi.Data.Imp
             return pessoas.ToList();
         }
 
-        public async Task<Pessoa> GetPessoaByName(string nome)
+        public async Task<Pessoa> GetPessoaByName(string id)
         {
-            var pessoa = await _pessoaCollection.FindAsync(x => x.Nome == nome);
+            var pessoa = await _pessoaCollection.FindAsync(x => x.Id == id);
             return pessoa.FirstOrDefault();
         }
 
@@ -42,15 +42,16 @@ namespace MongoCrudApi.Data.Imp
             await _pessoaCollection.InsertOneAsync(pessoa);
         }
 
-        public async Task Update(string nome, Pessoa pessoa)
+        public async Task Update(string id, Pessoa pessoa)
         {
+            pessoa.SetId(id);
             await _pessoaCollection.FindOneAndReplaceAsync<Pessoa>(
-                x => x.Nome == nome, pessoa);
+                x => x.Id == id, pessoa);
         }
 
-        public async Task Delete(string nome)
+        public async Task Delete(string id)
         {
-            var pessoa = await _pessoaCollection.DeleteOneAsync(x => x.Nome == nome);
+            var pessoa = await _pessoaCollection.DeleteOneAsync(x => x.Id == id);
         }
     }
 }

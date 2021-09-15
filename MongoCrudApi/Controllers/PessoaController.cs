@@ -14,6 +14,7 @@ namespace MongoCrudApi.Controllers
     {
         private readonly IPessoaRepository _pessoaRepository;
 
+
         public PessoaController(IPessoaRepository pessoaRepository)
         {
             _pessoaRepository = pessoaRepository;
@@ -26,10 +27,10 @@ namespace MongoCrudApi.Controllers
             return Ok(listaPessoas);
         }
 
-        [HttpGet("{nome}")]
-        public async Task<IActionResult> GetPessoaPorNome(string nome)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPessoaPorNome(string id)
         {
-            var pessoa = await _pessoaRepository.GetPessoaByName(nome);
+            var pessoa = await _pessoaRepository.GetPessoaByName(id);
             return Ok(pessoa);
         }
 
@@ -41,18 +42,18 @@ namespace MongoCrudApi.Controllers
             return Ok(pessoa);
         }
 
-        [HttpPut("{nome}")]
-        public async Task<ActionResult> AtualizarPessoa(string nome, Pessoa pessoa)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> AtualizarPessoa(string id, Pessoa pessoa)
         {
-            await _pessoaRepository.Update(nome, pessoa);
+            await _pessoaRepository.Update(id, pessoa);
 
             return Ok();
         }
 
-        [HttpDelete("{nome}")]
-        public async Task<ActionResult> ApagarPessoa(string nome)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> ApagarPessoa(string id)
         {
-            await _pessoaRepository.Delete(nome);
+            await _pessoaRepository.Delete(id);
 
             return Ok();
         }
