@@ -1,18 +1,13 @@
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MongoCrudApi.Data.Imp;
 using MongoCrudApi.Data.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MongoCrudApi
 {
@@ -36,6 +31,10 @@ namespace MongoCrudApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MongoCrudApi", Version = "v1" });
             });
+
+            services.AddHealthChecks()
+                .AddMongoDb(Configuration.GetConnectionString("Mongo2FAConnectionString"), name: "BancoMongoDB");
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +56,12 @@ namespace MongoCrudApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseHealthChecks("/api/hc", new HealthCheckOptions()
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
             });
         }
     }

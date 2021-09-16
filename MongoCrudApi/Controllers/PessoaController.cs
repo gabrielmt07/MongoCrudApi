@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MongoCrudApi.Data.Interfaces;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MongoCrudApi.Controllers
@@ -56,6 +58,8 @@ namespace MongoCrudApi.Controllers
 
             return Ok();
         }
+
+        
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> ApagarPessoa(string id)
